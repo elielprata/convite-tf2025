@@ -11,24 +11,25 @@
         body, html {
             margin: 0;
             padding: 0;
-            font-family: Arial, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
             text-align: center;
-            background-color: #f0f0f0; /* Fundo cinza claro da PÁGINA */
+            background-color: #f0f0f0; 
+            line-height: 1.4; /* Melhora a leitura */
         }
 
         /* O container que segura a imagem e o texto */
         .convite-container {
             position: relative; 
             max-width: 600px; /* Trava o tamanho máximo no PC */
-            margin: auto; /* Centraliza na tela */
+            margin: auto; 
             display: block; 
             overflow: hidden; 
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1); /* Sombra legal */
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1); 
         }
 
         /* A imagem de fundo (SUA ARTE COMPLETA) */
         .convite-container img {
-            width: 100%; /* Faz a imagem ser responsiva */
+            width: 100%; 
             display: block; 
         }
 
@@ -39,86 +40,90 @@
             left: 50%;
             transform: translateX(-50%);
             width: 90%; 
-            background-color: transparent; /* FUNDO TRANSPARENTE */
+            background-color: transparent; 
             color: #333; 
         }
         
-        /* Estilos para o campo de input e botão */
+        /* --- INPUTS E BOTÕES RESPONSIVOS --- */
         #area-input {
-            padding: 10px 0;
-            margin-bottom: 10px;
-            /* Fundo cinza REMOVIDO */
+            padding: 5px 0;
+            margin-bottom: 5px;
         }
         #area-input input {
             width: calc(80% - 20px); 
             padding: 10px;
-            font-size: 16px;
+            /* FONTE RESPONSIVA */
+            font-size: clamp(14px, 4vw, 16px);
             border: 1px solid #ccc;
             border-radius: 4px;
             margin-bottom: 10px;
         }
         #area-input button {
             padding: 10px 20px;
-            font-size: 16px;
+            /* FONTE RESPONSIVA */
+            font-size: clamp(14px, 4vw, 16px);
             cursor: pointer;
             border: none;
             border-radius: 4px;
             background-color: #007bff; /* Azul */
             color: white;
-            transition: background-color 0.3s ease;
-        }
-        #area-input button:hover {
-            background-color: #0056b3;
         }
 
-        /* Área do convite */
+        /* --- TEXTO DO CONVITE RESPONSIVO --- */
         #area-convite {
             display: none; 
             color: #333; 
-            font-size: 0.9em; 
-            /* Fundo cinza e padding REMOVIDOS */
+            /* FONTE BASE RESPONSIVA */
+            font-size: clamp(10px, 2.8vw, 14px);
         }
         
+        /* Título "CONVITE ESPECIAL" e "Culto Internacional..." */
         #area-convite h2 {
-            font-size: 1.2em; 
-            margin: 10px 0;
+            /* FONTE RESPONSIVA */
+            font-size: clamp(12px, 3.5vw, 16px);
+            font-weight: bold;
+            margin: 8px 0;
+            color: #000;
         }
         
         #area-convite p {
              margin: 5px 0; 
         }
 
-        /* O nome da pessoa em destaque */
+        /* "Olá, Isaac!" */
         #nome-destaque {
             color: #d9534f; /* Vermelho/vinho */
             font-weight: bold;
-            font-size: 1.5em; 
-            margin-bottom: 10px;
+            /* FONTE RESPONSIVA */
+            font-size: clamp(16px, 5vw, 22px);
+            margin-bottom: 8px;
+            margin-top: 0;
+        }
+        
+        /* Endereço */
+        #area-convite strong {
+            font-size: clamp(11px, 3vw, 14px);
         }
 
-        /* Botões de Ação (Gerar Novo, Download) */
+        /* --- BOTÕES DE AÇÃO RESPONSIVOS --- */
         .botoes-acao {
-            margin-top: 20px;
-            padding: 10px;
-            /* Fundo cinza REMOVIDO */
+            margin-top: 15px;
+            padding: 5px;
         }
         .botoes-acao button {
             padding: 10px 15px;
-            font-size: 14px;
+            /* FONTE RESPONSIVA */
+            font-size: clamp(12px, 3.5vw, 14px);
             cursor: pointer;
             border: none;
             border-radius: 4px;
             margin: 0 5px;
-            background-color: #28a745; /* Verde para Download */
+            background-color: #28a745; /* Verde */
             color: white;
-            transition: background-color 0.3s ease;
         }
         .botoes-acao button.btn-new {
-            background-color: #ffc107; /* Amarelo para Novo Convite */
+            background-color: #ffc107; /* Amarelo */
             color: #333;
-        }
-        .botoes-acao button:hover {
-            opacity: 0.9;
         }
 
     </style>
@@ -137,9 +142,14 @@
             </div>
 
             <div id="area-convite">
+                
+                <h2>CONVITE ESPECIAL</h2>
+                
                 <h1 id="nome-destaque">Olá!</h1>
                 <p>Você e sua família são nossos convidados de honra para o:</p>
+                
                 <h2>"Culto Internacional - Trombetas e Festas 2025"</h2>
+                
                 <p>Será um evento de alerta para o mundo sobre os acontecimentos atuais que antecedem a volta de Jesus.</p>
                 <p>
                     <strong>Data:</strong> 29 de Novembro de 2025<br>
@@ -179,7 +189,7 @@
 
         function baixarConvite() {
             var botoesAcao = document.getElementById('botoesAcao');
-            botoesAcao.style.display = 'none'; // Esconde botões
+            botoesAcao.style.display = 'none'; 
 
             var conviteElement = document.getElementById('conviteArea');
 
@@ -195,7 +205,7 @@
                 link.click(); 
                 document.body.removeChild(link); 
                 
-                botoesAcao.style.display = 'block'; // Mostra botões de novo
+                botoesAcao.style.display = 'block'; 
             });
         }
     </script>
