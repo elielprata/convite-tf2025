@@ -8,52 +8,49 @@
     <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
 
     <style>
-        /* CSS NOVO E MELHORADO */
-
         body, html {
             margin: 0;
             padding: 0;
             font-family: Arial, sans-serif;
             text-align: center;
-            background-color: #f0f0f0; 
+            background-color: #f0f0f0; /* Fundo cinza claro da PÁGINA */
         }
 
-        /* Container que segura a imagem e o texto */
+        /* O container que segura a imagem e o texto */
         .convite-container {
             position: relative; 
-            max-width: 600px; 
-            margin: auto; 
+            max-width: 600px; /* Trava o tamanho máximo no PC */
+            margin: auto; /* Centraliza na tela */
             display: block; 
             overflow: hidden; 
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1); /* Sombra para destacar o convite */
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1); /* Sombra legal */
         }
 
         /* A imagem de fundo (SUA ARTE COMPLETA) */
         .convite-container img {
-            width: 100%; 
+            width: 100%; /* Faz a imagem ser responsiva */
             display: block; 
         }
 
         /* Onde o texto interativo vai ficar */
         .conteudo {
             position: absolute; 
-            bottom: 3%; /* Ajuste essa % se o texto ficar muito em cima ou embaixo */
+            bottom: 3%; /* Posição do texto (ajuste se precisar) */
             left: 50%;
             transform: translateX(-50%);
             width: 90%; 
-            background-color: transparent; 
+            background-color: transparent; /* FUNDO TRANSPARENTE */
             color: #333; 
         }
         
         /* Estilos para o campo de input e botão */
         #area-input {
             padding: 10px 0;
-            background-color: rgba(255, 255, 255, 0.8); /* Fundo semi-transparente para o input */
-            border-radius: 5px;
             margin-bottom: 10px;
+            /* Fundo cinza REMOVIDO */
         }
         #area-input input {
-            width: calc(80% - 20px); /* Ajuste para padding */
+            width: calc(80% - 20px); 
             padding: 10px;
             font-size: 16px;
             border: 1px solid #ccc;
@@ -79,9 +76,7 @@
             display: none; 
             color: #333; 
             font-size: 0.9em; 
-            background-color: rgba(255, 255, 255, 0.8); /* Fundo semi-transparente para o texto */
-            padding: 10px;
-            border-radius: 5px;
+            /* Fundo cinza e padding REMOVIDOS */
         }
         
         #area-convite h2 {
@@ -95,7 +90,7 @@
 
         /* O nome da pessoa em destaque */
         #nome-destaque {
-            color: #d9534f; 
+            color: #d9534f; /* Vermelho/vinho */
             font-weight: bold;
             font-size: 1.5em; 
             margin-bottom: 10px;
@@ -104,9 +99,8 @@
         /* Botões de Ação (Gerar Novo, Download) */
         .botoes-acao {
             margin-top: 20px;
-            background-color: rgba(255, 255, 255, 0.8); /* Fundo semi-transparente */
             padding: 10px;
-            border-radius: 5px;
+            /* Fundo cinza REMOVIDO */
         }
         .botoes-acao button {
             padding: 10px 15px;
@@ -132,6 +126,7 @@
 <body>
 
     <div class="convite-container" id="conviteArea"> 
+        
         <img src="conviteeditavel.png" alt="Convite Trombetas e Festas 2025">
 
         <div class="conteudo">
@@ -164,47 +159,43 @@
     <script>
         function gerarConvite() {
             var nome = document.getElementById('campo-nome').value;
-            if (nome.trim() === "") { // .trim() para remover espaços vazios
+            if (nome.trim() === "") { 
                 nome = "Convidado(a) Especial";
             }
             document.getElementById('nome-destaque').innerText = "Olá, " + nome + "!";
             
             document.getElementById('area-input').style.display = 'none';
             document.getElementById('area-convite').style.display = 'block';
-            document.getElementById('botoesAcao').style.display = 'block'; // Mostra os botões de ação
+            document.getElementById('botoesAcao').style.display = 'block'; 
         }
 
         function reiniciarConvite() {
-            document.getElementById('campo-nome').value = ''; // Limpa o campo
-            document.getElementById('area-input').style.display = 'block'; // Mostra a área de input
-            document.getElementById('area-convite').style.display = 'none'; // Esconde o convite
-            document.getElementById('botoesAcao').style.display = 'none'; // Esconde os botões de ação
-            document.getElementById('nome-destaque').innerText = 'Olá!'; // Reseta o texto
+            document.getElementById('campo-nome').value = ''; 
+            document.getElementById('area-input').style.display = 'block'; 
+            document.getElementById('area-convite').style.display = 'none'; 
+            document.getElementById('botoesAcao').style.display = 'none'; 
+            document.getElementById('nome-destaque').innerText = 'Olá!'; 
         }
 
         function baixarConvite() {
-            // Oculta os botões de ação temporariamente antes de tirar a foto
             var botoesAcao = document.getElementById('botoesAcao');
-            botoesAcao.style.display = 'none';
+            botoesAcao.style.display = 'none'; // Esconde botões
 
             var conviteElement = document.getElementById('conviteArea');
 
-            // html2canvas vai renderizar o que está dentro de 'conviteArea'
             html2canvas(conviteElement, {
-                useCORS: true, // Importante se sua imagem de fundo vem de outro lugar (CDN do GitHub, etc.)
-                scale: 2, // Aumenta a resolução da imagem gerada (opcional, mas recomendado para melhor qualidade)
-                logging: false // Desabilita logs no console para não poluir
+                useCORS: true, 
+                scale: 2, // Imagem com o dobro da resolução
+                logging: false 
             }).then(function(canvas) {
-                // Cria um link para download
                 var link = document.createElement('a');
-                link.download = 'convite-personalizado.png'; // Nome do arquivo
-                link.href = canvas.toDataURL('image/png', 1.0); // Converte o canvas para imagem PNG (1.0 = qualidade máxima)
-                document.body.appendChild(link); // Adiciona o link ao body (temporariamente)
-                link.click(); // Simula um clique no link para iniciar o download
-                document.body.removeChild(link); // Remove o link
+                link.download = 'convite-personalizado.png'; 
+                link.href = canvas.toDataURL('image/png', 1.0); 
+                document.body.appendChild(link); 
+                link.click(); 
+                document.body.removeChild(link); 
                 
-                // Reexibe os botões de ação
-                botoesAcao.style.display = 'block';
+                botoesAcao.style.display = 'block'; // Mostra botões de novo
             });
         }
     </script>
