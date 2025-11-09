@@ -30,8 +30,7 @@
         box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
       }
 
-      #area-input input,
-      #area-input select {
+      #area-input input {
         width: 80%;
         padding: 10px;
         font-size: clamp(12px, 3.5vw, 15px);
@@ -55,12 +54,51 @@
         background-color: #0056b3;
       }
 
-      /* Container do convite — inicialmente escondido */
+      /* Toggle de idioma */
+      .language-toggle {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        margin-bottom: 15px;
+      }
+
+      .toggle-switch {
+        position: relative;
+        width: 70px;
+        height: 30px;
+        background-color: #ccc;
+        border-radius: 30px;
+        cursor: pointer;
+        transition: 0.3s;
+      }
+
+      .toggle-switch::before {
+        content: '';
+        position: absolute;
+        top: 3px;
+        left: 3px;
+        width: 24px;
+        height: 24px;
+        background-color: white;
+        border-radius: 50%;
+        transition: 0.3s;
+      }
+
+      .toggle-switch.active {
+        background-color: #007bff;
+      }
+
+      .toggle-switch.active::before {
+        left: 43px;
+      }
+
+      /* Convite */
       .convite-container {
         position: relative;
         max-width: 600px;
         margin: 20px auto;
-        display: none; /* começa escondido */
+        display: none;
         overflow: hidden;
         box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
         border-radius: 10px;
@@ -71,7 +109,6 @@
         display: block;
       }
 
-      /* Texto sobre a imagem */
       .conteudo {
         position: absolute;
         bottom: 5%;
@@ -97,7 +134,7 @@
       }
 
       #area-convite p {
-        margin: 4px 0;
+        margin: 6px 0;
       }
 
       #nome-destaque {
@@ -108,16 +145,15 @@
       }
 
       #endereco-destaque {
-        font-size: clamp(12px, 4vw, 18px);
-        font-weight: bold;
         color: #d9534f;
+        font-weight: bold;
+        font-size: clamp(13px, 4vw, 18px);
       }
 
-      /* Botões */
       .botoes-acao {
         margin-top: 15px;
         padding: 10px;
-        display: none; /* começa escondido */
+        display: none;
       }
 
       .botoes-acao button {
@@ -132,29 +168,21 @@
         transition: 0.2s;
       }
 
-      .botoes-acao button:hover {
-        background-color: #218838;
-      }
-
       .botoes-acao button.btn-new {
         background-color: #ffc107;
         color: #333;
-      }
-
-      .botoes-acao button.btn-new:hover {
-        background-color: #e0a800;
       }
     </style>
   </head>
 
   <body>
-    <!-- 🧾 Campos de entrada -->
     <div id="area-input">
-      <select id="campo-idioma">
-        <option value="pt">Português 🇧🇷</option>
-        <option value="en">English 🇺🇸</option>
-      </select>
-      <br />
+      <div class="language-toggle">
+        <span id="flag-pt">🇧🇷</span>
+        <div id="toggleSwitch" class="toggle-switch"></div>
+        <span id="flag-en">🇺🇸</span>
+      </div>
+
       <input
         type="text"
         id="campo-nome"
@@ -167,41 +195,23 @@
         placeholder="Digite o endereço da igreja aqui"
       />
       <br />
-      <input type="date" id="campo-data" value="2025-11-29" />
-      <br />
-      <input type="time" id="campo-horario" value="17:00" />
-      <br />
       <button onclick="gerarConvite()">Personalizar Convite</button>
     </div>
 
-    <!-- 📜 Convite (escondido até ser gerado) -->
     <div class="convite-container" id="conviteArea">
-      <img src="conviteeditavel.png" alt="Convite Trombetas e Festas 2025" />
+      <img
+        src="conviteeditavel.png"
+        alt="Convite Trombetas e Festas 2025"
+        id="conviteImage"
+      />
       <div class="conteudo" id="area-convite">
         <h2 id="titulo-convite">CONVITE ESPECIAL</h2>
         <h1 id="nome-destaque">Olá!</h1>
-        <p id="mensagem1">
-          Você e sua família são nossos convidados de honra para o:
-        </p>
-        <h2 id="evento-titulo">
-          "Culto Internacional - Trombetas e Festas 2025"
-        </h2>
-        <p id="mensagem2">
-          Será um evento de alerta para o mundo sobre os acontecimentos atuais
-          que antecedem a volta de Jesus.
-        </p>
-        <p id="mensagem3">
-          <strong>Data:</strong> 29 de Novembro de 2025<br />
-          <strong>Horário:</strong> 17:00
-        </p>
-        <p id="mensagem4">
-          Convidamos vocês para assistirem ao evento conosco na:
-        </p>
-        <strong id="endereco-destaque">[Endereço aparecerá aqui]</strong>
+        <div id="mensagem1"></div>
+        <div id="mensagem2"></div>
       </div>
     </div>
 
-    <!-- 🖼️ Botões -->
     <div class="botoes-acao" id="botoesAcao">
       <button class="btn-new" onclick="reiniciarConvite()">
         Gerar Novo Convite
@@ -210,78 +220,58 @@
     </div>
 
     <script>
+      let idioma = 'pt'
+
       const textos = {
         pt: {
+          image: 'conviteeditavel.png',
           titulo: 'CONVITE ESPECIAL',
           saudacao: (nome) => `Olá, ${nome}!`,
-          msg1: 'Você e sua família são nossos convidados de honra para o:',
-          evento: '"Culto Internacional - Trombetas e Festas 2025"',
-          msg2: 'Será um evento de alerta para o mundo sobre os acontecimentos atuais que antecedem a volta de Jesus.',
-          msg3: (data, hora) =>
-            `<strong>Data:</strong> ${data}<br><strong>Horário:</strong> ${hora}`,
-          msg4: 'Convidamos vocês para assistirem ao evento conosco na:',
+          msg1: `<p><strong>Igreja Cristã Maranata</strong> tem a alegria de convidar você e sua família para participar do <strong>"Culto Internacional - Trombetas e Festas 2025".</strong> Este evento será <strong>um alerta profético para o mundo sobre os acontecimentos atuais que antecedem a volta do Senhor Jesus.</strong></p>`,
+          msg2: (nome, endereco) => `
+            <p><strong>Data:</strong> 29 de Novembro de 2025<br>
+            <strong>Horário:</strong> "17:00 (Horário de Brasília)"</p>
+            <p>Convidamos vocês para assistirem ao evento conosco na:</p>
+            <p><strong id="endereco-destaque">${endereco}</strong></p>
+          `,
         },
         en: {
+          image: 'convite-editavel-english-v2.png',
           titulo: 'SPECIAL INVITATION',
           saudacao: (nome) => `Hello, ${nome}!`,
-          msg1: 'You and your family are our special guests for the:',
-          evento: '"International Service - Trumpets and Feasts 2025"',
-          msg2: 'This will be a prophetic alert to the world about the events that precede the return of Jesus.',
-          msg3: (data, hora) =>
-            `<strong>Date:</strong> ${data}<br><strong>Time:</strong> ${hora}`,
-          msg4: 'We invite you to join us at:',
+          msg1: `<p><strong>Maranatha Christian Church</strong> is honored to invite you and your family to join the <strong>"International Service: Trumpets and Feasts 2025."</strong> This event will serve as <strong>a prophetic warning to the world about current events leading up to the return of the Lord Jesus.</strong></p>`,
+          msg2: (nome, endereco) => `
+            <p><strong>Date:</strong> November 30, 2025<br>
+            <strong>Time:</strong> "10:00 AM (Orlando Time)"</p>
+            <p>We invite you to join us at:</p>
+            <p><strong id="endereco-destaque">${endereco}</strong></p>
+          `,
         },
       }
 
-      function formatarData(valorData, idioma) {
-        const data = new Date(valorData)
-        return data.toLocaleDateString(idioma === 'pt' ? 'pt-BR' : 'en-US', {
-          day: 'numeric',
-          month: 'long',
-          year: 'numeric',
-        })
-      }
-
-      function formatarHorario(horario, idioma) {
-        if (idioma === 'pt') return horario
-        const [hora, minuto] = horario.split(':').map(Number)
-        const ampm = hora >= 12 ? 'PM' : 'AM'
-        const hora12 = hora % 12 || 12
-        return `${hora12}:${minuto.toString().padStart(2, '0')} ${ampm}`
-      }
+      const toggle = document.getElementById('toggleSwitch')
+      toggle.addEventListener('click', () => {
+        toggle.classList.toggle('active')
+        idioma = toggle.classList.contains('active') ? 'en' : 'pt'
+      })
 
       function gerarConvite() {
-        const idioma = document.getElementById('campo-idioma').value
         let nome = document.getElementById('campo-nome').value.trim()
         let endereco = document.getElementById('campo-endereco').value.trim()
-        let data = document.getElementById('campo-data').value
-        let horario = document.getElementById('campo-horario').value || '17:00'
 
         if (!nome)
           nome = idioma === 'pt' ? 'Convidado(a) Especial' : 'Special Guest'
         if (!endereco)
-          endereco =
-            idioma === 'pt'
-              ? 'Nossa igreja mais próxima de você!'
-              : 'Our nearest church to you!'
+          endereco = idioma === 'pt' ? 'Av Castro Alves' : 'Av Castro Alves'
 
-        const dataFormatada = formatarData(data, idioma)
-        const horarioFormatado = formatarHorario(horario, idioma)
         const t = textos[idioma]
 
+        document.getElementById('conviteImage').src = t.image
         document.getElementById('titulo-convite').innerText = t.titulo
         document.getElementById('nome-destaque').innerText = t.saudacao(nome)
-        document.getElementById('mensagem1').innerText = t.msg1
-        document.getElementById('evento-titulo').innerText = t.evento
-        document.getElementById('mensagem2').innerText = t.msg2
-        document.getElementById('mensagem3').innerHTML = t.msg3(
-          dataFormatada,
-          horarioFormatado
-        )
-        document.getElementById('mensagem4').innerText = t.msg4
-        document.getElementById('endereco-destaque').innerText = endereco
+        document.getElementById('mensagem1').innerHTML = t.msg1
+        document.getElementById('mensagem2').innerHTML = t.msg2(nome, endereco)
 
-        // mostra o convite e botões, esconde os inputs
         document.getElementById('area-input').style.display = 'none'
         document.getElementById('conviteArea').style.display = 'block'
         document.getElementById('area-convite').style.display = 'block'
@@ -291,8 +281,6 @@
       function reiniciarConvite() {
         document.getElementById('campo-nome').value = ''
         document.getElementById('campo-endereco').value = ''
-        document.getElementById('campo-data').value = '2025-11-29'
-        document.getElementById('campo-horario').value = '17:00'
         document.getElementById('area-input').style.display = 'block'
         document.getElementById('conviteArea').style.display = 'none'
         document.getElementById('botoesAcao').style.display = 'none'
